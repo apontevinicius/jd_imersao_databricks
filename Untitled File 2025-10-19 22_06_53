@@ -1,0 +1,22 @@
+%sql
+-- 1 Cria o catálogo principal (onde toda a plataforma de dados será organizada)
+CREATE CATALOG IF NOT EXISTS lakehouse
+COMMENT "Catálogo principal do projeto, com camadas de dados governadas via Unity Catalog";
+
+-- 2 Cria as quatro camadas da arquitetura de dados
+CREATE SCHEMA IF NOT EXISTS lakehouse.raw
+COMMENT "Camada RAW - dados brutos, como chegam das fontes (SQL, API, planilhas)";
+CREATE VOLUME IF NOT EXISTS lakehouse.raw.coinbase;
+CREATE VOLUME IF NOT EXISTS lakehouse.raw.yfinance;
+
+CREATE SCHEMA IF NOT EXISTS lakehouse.bronze
+COMMENT "Camada BRONZE - dados padronizados, com metadados e controle de ingestão";
+
+CREATE SCHEMA IF NOT EXISTS lakehouse.silver
+COMMENT "Camada SILVER - dados tratados, com regras de negócio aplicadas";
+
+CREATE SCHEMA IF NOT EXISTS lakehouse.gold
+COMMENT "Camada GOLD - dados analíticos e métricas finais para BI e IA";
+
+-- 3 (opcional) Verifica se tudo foi criado corretamente
+SHOW SCHEMAS IN lakehouse;
